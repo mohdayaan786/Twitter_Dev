@@ -11,6 +11,6 @@ app.listen(PORT, async () => {
   await connect();
   console.log('Connected to MongoDB');
   const tweetRepository = new TweetRepository();
-  const tweet = await tweetRepository.getWithComments('67f802e6b958e1c658c6c4df');
-  console.log(tweet);
+  const tweet = await tweetRepository.getAll(0, 4);
+  console.log(tweet[0].contentWithEmail);
 });

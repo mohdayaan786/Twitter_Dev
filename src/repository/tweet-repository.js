@@ -1,4 +1,3 @@
-const Comment = require('../models/comments');
 const Tweet = require('../models/tweet');
 
 class TweetRepository {
@@ -11,15 +10,19 @@ class TweetRepository {
     }
 
     async getWithComments(id) {
-        return await Tweet.findById(id).populate({path : 'comments'});
+        return await Tweet.findById(id).populate({path : 'comments'}).lean();
     }
-
+ 
     async update(tweetId, data) {
         return await Tweet.findByIdAndUpdate(tweetId,data, {new:true});
     }
 
     async delete(id) {
         return await Tweet.findByIdAndDelete(id);
+    }
+
+    async getAll(offset, limit) {
+        return await Tweet.find().skip(offset).limit(limit);
     }
 }
 module.exports = TweetRepository;
