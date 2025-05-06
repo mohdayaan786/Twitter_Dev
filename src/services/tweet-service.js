@@ -9,20 +9,32 @@ class TweetService {
     async create(data) {
         const content = data.content;
         let tags = content.match(/#[a-zA-Z0-9_]+/g) || [];
-        tags =  tags.map(tag => tag.substring(1));
-        console.log(tags);
+        tags = tags.map(tag => tag.substring(1).toLowerCase());
+        console.log("Extracted tags:", tags);
+    
         const tweet = await this.tweetRepository.create(data);
-        let alreadyExists = await this.hashtagRepository.findByName(tags);
+        console.log("Created tweet:", tweet);
+    
+        const alreadyExists = await this.hashtagRepository.findByName(tags);
         const existingTagTitles = alreadyExists.map(tag => tag.title);
+    
         const newTags = tags.filter(tag => !existingTagTitles.includes(tag));
-        const response = await this.hashtagRepository.bulkCreate(newTags.map(tag => ({ title: tag, tweets: [tweet._id] })));
-        console.log(response);
-        alreadyExists.forEach((tag) => { 
+        if (newTags.length > 0) {
+            const response = await this.hashtagRepository.bulkCreate(
+                newTags.map(tag => ({ title: tag, tweets: [tweet._id] }))
+            );
+            console.log("New hashtags created:", response);
+        }
+    
+        // Update existing hashtags with new tweet ID
+        for (const tag of alreadyExists) {
             tag.tweets.push(tweet._id);
-            tag.save();
-        });
+            await tag.save();  // ensure each save completes
+        }
+    
         return tweet;
     }
+    
 }
 
 module.exports = TweetService;

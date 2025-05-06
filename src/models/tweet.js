@@ -7,12 +7,6 @@ const tweetSchema = new Schema({
         required: true,
         max : [256, 'Content is too long'],
     },
-    hashtags: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Hashtag',
-        },
-    ],
 }, {
     timestamps: true,
 });
