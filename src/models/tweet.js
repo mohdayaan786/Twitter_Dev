@@ -7,6 +7,12 @@ const tweetSchema = new Schema({
         required: true,
         max : [256, 'Content is too long'],
     },
+    likes:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Like',
+        }
+    ],
 }, {
     timestamps: true,
 });
