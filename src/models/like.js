@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const LikeSchema = new mongoose.Schema({
     onModel: {
-        type: string,
+        type: String,
         required: true,
         enum: ['Tweet', 'Comment']
     },
