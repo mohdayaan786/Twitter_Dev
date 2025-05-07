@@ -34,6 +34,10 @@ class TweetService {
     
         return tweet;
     }
+
+    async getTweetById(id) {
+        return await this.tweetRepository.getWithComments(id);
+    }
     
 }
 

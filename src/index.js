@@ -29,6 +29,6 @@ app.listen(PORT, async () => {
   // })
   // console.log(response);
 
-  const likeService = new LikeService();
-  likeService.toggleLike(tweets[1]._id, 'Tweet', '681b19b1404427a1e8cb58cf');   
+  // const likeService = new LikeService();
+  // likeService.toggleLike(tweets[1]._id, 'Tweet', '681b19b1404427a1e8cb58cf');   
 });
