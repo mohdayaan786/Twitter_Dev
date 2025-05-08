@@ -7,8 +7,8 @@ class UserRepository extends CrudRepository {
         super(User);
     }
 
-    async getByEmail(email) {
-        return await User.findOne({ email });
+    async getByEmail(data) {
+        return await User.findOne(data);
     }
 }
 

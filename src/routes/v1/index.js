@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const {create, getTweetById} = require('../../controllers/tweet-controller');
-const {toggleLike} = require('../../controllers/like-controller');
-const {createComm} = require('../../controllers/comment-controller');
+const { TweetController, LikeController, CommentController, AuthController } = require('../../controllers/index');
+const {authenticate} = require('../../middlewares/authenticate');
 
-router.post('/tweets', create);
-router.get('/tweet', getTweetById);
-router.post('/likes/toggle', toggleLike);
-router.post('/comments', createComm);
+router.post('/tweets', authenticate , TweetController.create);
+router.get('/tweet', TweetController.getTweetById);
+router.post('/likes/toggle', LikeController.toggleLike);
+router.post('/comments', authenticate, CommentController.createComm);
+router.post('/signup', AuthController.signUp);
+router.post('/signin', AuthController.signIn);
 
 module.exports = router;
