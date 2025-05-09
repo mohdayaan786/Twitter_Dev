@@ -1,8 +1,4 @@
-Here’s a clean and professional `README.md` you can use for your **Twitter Backend** project:
-
----
-
-# 🐦 Twitter Backend Clone
+# 🐦 Twitter-Backend Clone
 
 A fully functional backend for a Twitter-like social media platform built with **Node.js**, **Express.js**, **MongoDB**, and **Passport.js**. This project supports features like tweeting with images, following users, likes, comments, retweets, user authentication, and hashtag management.
 
@@ -137,5 +133,3 @@ PRs are welcome! Feel free to fork the repo and submit a pull request.
 This project is licensed under the [MIT License](LICENSE).
 
 ---
-
-Would you like me to create a styled version with emojis, badges, and a `LICENSE` template too?
