@@ -26,10 +26,9 @@ class TweetService {
             console.log("New hashtags created:", response);
         }
     
-        // Update existing hashtags with new tweet ID
         for (const tag of alreadyExists) {
             tag.tweets.push(tweet._id);
-            await tag.save();  // ensure each save completes
+            await tag.save();  
         }
     
         return tweet;
