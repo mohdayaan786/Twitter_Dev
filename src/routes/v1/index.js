@@ -9,7 +9,7 @@ const { authenticate } = require('../../middlewares/authenticate');
 
 router.post('/tweets', authenticate, upload.single('image'), TweetController.create);
 router.get('/tweet', TweetController.getTweetById);
-router.post('/likes/toggle', LikeController.toggleLike);
+router.post('/likes/toggle',authenticate, LikeController.toggleLike);
 router.post('/comments', authenticate, CommentController.createComm);
 router.post('/signup', AuthController.signUp);
 router.post('/signin', AuthController.signIn);
