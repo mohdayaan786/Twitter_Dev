@@ -5,9 +5,13 @@ const tweetSchema = new Schema({
     content: {
         type: String,
         required: true,
-        max : [256, 'Content is too long'],
+        max: [256, 'Content is too long'],
     },
-    likes:[
+    image: {
+        data: Buffer,          // Binary data
+        contentType: String,   // MIME type (e.g., 'image/jpeg')
+    },
+    likes: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Like',
