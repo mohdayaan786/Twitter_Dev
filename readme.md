@@ -46,6 +46,7 @@ A fully functional backend for a Twitter-like social media platform built with *
 | **Mongoose**    | ODM for MongoDB                      |
 | **Passport.js** | Authentication middleware            |
 | **Multer**      | Middleware for handling file uploads |
+| **Jest**        | JavaScript Testing Framework         |
 
 ---
 
@@ -61,6 +62,11 @@ src/
 ├── routes/           # API route definitions
 ├── middlewares/      # Custom middlewares (auth, multer, etc.)
 └── utils/            # Utility functions
+
+tests/
+├── controllers/      # Unit tests for controllers (Jest)
+├── services/         # Unit tests for services
+└── ...
 ```
 
 ---
@@ -93,6 +99,39 @@ Use query parameters for tweet feeds:
 ```
 GET /api/v1/tweets?page=2&limit=10
 ```
+
+---
+
+## 🧪 Running Tests with Jest
+
+This project uses **Jest** for unit and integration testing.
+
+### 📦 Install Jest (if not already installed):
+
+```bash
+npm install --save-dev jest
+```
+
+> Jest config can be defined in `package.json` or a separate `jest.config.js`.
+
+### 🧪 Run all tests:
+
+```bash
+npm test
+```
+
+or
+
+```bash
+npx jest
+```
+
+### 🧪 Example Test Files
+
+* `tests/controllers/tweet-controller.test.js`
+* `tests/services/tweet-service.test.js`
+
+Each test mocks dependencies like services or models using `jest.mock()` and ensures route/controller logic behaves as expected.
 
 ---
 
@@ -131,5 +170,3 @@ PRs are welcome! Feel free to fork the repo and submit a pull request.
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
-
----
