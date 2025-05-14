@@ -3,7 +3,9 @@ const tweetService = new TweetService();
 
 const create = async (req, res) => {
     try {
-        const tweet = await tweetService.create(req.body, req.file);
+        const userId = req.user.id; // assuming authentication middleware sets req.user
+        const tweet = await tweetService.create(req.body, req.file, userId);
+        
         res.status(201).json({
             success: true,
             message: "Tweet created successfully",
@@ -20,6 +22,41 @@ const create = async (req, res) => {
         });
     }
 };
+
+
+const retweet = async (req, res) => {
+    try {
+        const { tweetId, content = '' } = req.body;
+        const userId = req.user.id;
+
+        if (!tweetId) {
+            return res.status(400).json({
+                success: false,
+                message: "tweetId is required",
+                data: {},
+                err: {}
+            });
+        }
+
+        const retweet = await tweetService.retweet(tweetId, userId, content);
+        res.status(201).json({
+            success: true,
+            message: "Retweet successful",
+            data: retweet,
+            err: {}
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            message: "Something went wrong during retweet!",
+            data: {},
+            err: err.message
+        });
+    }
+};
+
+
 
 const getImage = async (req, res) => {
     try {
@@ -70,6 +107,7 @@ module.exports = {
     create,
     getImage,
     getTweetById,
-    tweetService
+    tweetService,
+    retweet
 };
 

@@ -8,6 +8,7 @@ const { TweetController, LikeController, CommentController, AuthController } = r
 const { authenticate } = require('../../middlewares/authenticate');
 
 router.post('/tweets', authenticate, upload.single('image'), TweetController.create);
+router.post('/tweets/retweet', authenticate, TweetController.retweet);
 router.get('/tweet', TweetController.getTweetById);
 router.post('/likes/toggle',authenticate, LikeController.toggleLike);
 router.post('/comments', authenticate, CommentController.createComm);

@@ -32,6 +32,11 @@ class TweetRepository extends CrudRepository {
             throw error;
         }
     }
+
+    async findOne(filter) {
+        return await Tweet.findOne(filter);
+    }
+
 }
 
 module.exports = TweetRepository;

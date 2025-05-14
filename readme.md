@@ -1,6 +1,6 @@
 # 🐦 Twitter-Backend Clone
 
-A fully functional backend for a Twitter-like social media platform built with **Node.js**, **Express.js**, **MongoDB**, and **Passport.js**. This project supports features like tweeting with images, following users, likes, comments, retweets, user authentication, and hashtag management.
+A fully functional backend for a Twitter-like social media platform built with **Node.js**, **Express.js**, **MongoDB**, and **Passport.js**. This project supports features like tweeting with images, likes, comments, retweets, user authentication, and hashtag management.
 
 ---
 
@@ -15,24 +15,17 @@ A fully functional backend for a Twitter-like social media platform built with *
 ### 👥 User System
 
 * Authentication using **Passport.js (JWT Strategy)**
-* Follow/unfollow users
 * User profile includes:
 
   * Name
   * Bio
-  * Follower count
   * Last 10 tweets
 
 ### 💬 Interactions
 
-* Like & comment on tweets (only if you follow the author)
+* Like & comment on tweets 
 * Like & comment on comments
-* **Retweet** functionality
-
-### 🔍 Visibility & Access
-
-* Tweets visible only to followers of the author
-* Pagination support on tweet feeds
+* **Retweet** functionality (with or without quotes)
 
 ---
 
