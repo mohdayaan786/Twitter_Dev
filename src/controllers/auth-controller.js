@@ -1,7 +1,6 @@
 const {UserService} = require('../services');
 const userService = new UserService();
 
-
 const signUp = async (req, res) => {
     try {
         const user = await userService.signUp({
@@ -65,5 +64,6 @@ const signIn = async (req, res) => {
 
 module.exports = {
     signUp,
-    signIn
+    signIn,
+    userService
 }

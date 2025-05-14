@@ -1,7 +1,5 @@
-const TweetService = require('../services/tweet-service');
-
 module.exports = {
-    TweetController : require('./tweet-controller')(new TweetService()),
+    TweetController : require('./tweet-controller'),
     LikeController : require('./like-controller'),
     CommentController : require('./comment-controller'),
     AuthController : require('./auth-controller'),

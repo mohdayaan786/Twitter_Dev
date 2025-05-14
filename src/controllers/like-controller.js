@@ -1,5 +1,4 @@
 const LikeService = require('../services/like-service');
-
 const likeService = new LikeService();
 
 const toggleLike = async (req, res) => {
@@ -24,5 +23,6 @@ const toggleLike = async (req, res) => {
 
 
 module.exports = {
-    toggleLike
+    toggleLike,
+    likeService
 }

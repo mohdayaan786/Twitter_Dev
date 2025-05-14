@@ -1,25 +1,21 @@
-const tweetControllerFactory = require('../../src/controllers/tweet-controller');
+const {
+    create,
+    getImage,
+    getTweetById,
+    tweetService
+} = require('../../src/controllers/tweet-controller');
 
 describe('TweetController', () => {
-    let mockTweetService, controller, mockReq, mockRes;
+    let req, res;
 
     beforeEach(() => {
-        mockTweetService = {
-            create: jest.fn(),
-            getTweetById: jest.fn()
-        };
-        controller = tweetControllerFactory(mockTweetService);
-
-        mockReq = {
-            body: { content: 'This is a test #tweet' },
-            file: {
-                buffer: Buffer.from('image-data'),
-                mimetype: 'image/png'
-            },
+        req = {
+            body: { content: 'Test tweet' },
+            file: { buffer: Buffer.from('image data') },
             query: { id: 'tweet123' }
         };
 
-        mockRes = {
+        res = {
             status: jest.fn().mockReturnThis(),
             json: jest.fn(),
             set: jest.fn(),
@@ -27,59 +23,118 @@ describe('TweetController', () => {
         };
     });
 
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
     describe('create', () => {
-        it('should create tweet and return 201', async () => {
-            const mockTweet = { _id: 'abc123', content: mockReq.body.content };
-            mockTweetService.create.mockResolvedValue(mockTweet);
+        it('should return 201 on successful tweet creation', async () => {
+            const mockTweet = { id: 'tweet123', content: 'Test tweet' };
+            jest.spyOn(tweetService, 'create').mockResolvedValue(mockTweet);
 
-            await controller.create(mockReq, mockRes);
+            await create(req, res);
 
-            expect(mockTweetService.create).toHaveBeenCalledWith(mockReq.body, mockReq.file);
-            expect(mockRes.status).toHaveBeenCalledWith(201);
-            expect(mockRes.json).toHaveBeenCalledWith(expect.objectContaining({ data: mockTweet }));
+            expect(tweetService.create).toHaveBeenCalledWith(req.body, req.file);
+            expect(res.status).toHaveBeenCalledWith(201);
+            expect(res.json).toHaveBeenCalledWith({
+                success: true,
+                message: "Tweet created successfully",
+                data: mockTweet,
+                err: {}
+            });
         });
 
-        it('should return 500 on error', async () => {
-            mockTweetService.create.mockRejectedValue(new Error('Failure'));
+        it('should return 500 on failure', async () => {
+            jest.spyOn(tweetService, 'create').mockRejectedValue(new Error('Creation failed'));
 
-            await controller.create(mockReq, mockRes);
+            await create(req, res);
 
-            expect(mockRes.status).toHaveBeenCalledWith(500);
-            expect(mockRes.json).toHaveBeenCalledWith(expect.objectContaining({ success: false }));
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+                success: false,
+                message: "Something went wrong!",
+                data: {},
+                err: "Creation failed"
+            }));
         });
     });
 
     describe('getTweetById', () => {
-        it('should fetch tweet by ID', async () => {
-            const tweet = { _id: 'tweet123', content: 'hello' };
-            mockTweetService.getTweetById.mockResolvedValue(tweet);
+        it('should return 200 with tweet data', async () => {
+            const mockTweet = { id: 'tweet123', content: 'Tweet content' };
+            jest.spyOn(tweetService, 'getTweetById').mockResolvedValue(mockTweet);
 
-            await controller.getTweetById(mockReq, mockRes);
+            await getTweetById(req, res);
 
-            expect(mockTweetService.getTweetById).toHaveBeenCalledWith('tweet123');
-            expect(mockRes.status).toHaveBeenCalledWith(200);
+            expect(tweetService.getTweetById).toHaveBeenCalledWith('tweet123');
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith({
+                success: true,
+                message: "Tweet fetched successfully",
+                data: mockTweet,
+                err: {}
+            });
+        });
+
+        it('should return 500 on failure', async () => {
+            jest.spyOn(tweetService, 'getTweetById').mockRejectedValue(new Error('Fetch failed'));
+
+            await getTweetById(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+                success: false,
+                message: "Something went wrong!",
+                data: {},
+                err: "Fetch failed"
+            }));
         });
     });
 
     describe('getImage', () => {
-        it('should send image if exists', async () => {
-            const imageData = Buffer.from('img');
-            const tweet = { image: { data: { buffer: imageData }, contentType: 'image/png' } };
+        it('should return image buffer if image exists', async () => {
+            const mockTweet = {
+                id: 'tweet123',
+                image: {
+                    contentType: 'image/png',
+                    data: { buffer: Buffer.from('image buffer') }
+                }
+            };
+            jest.spyOn(tweetService, 'getTweetById').mockResolvedValue(mockTweet);
 
-            mockTweetService.getTweetById.mockResolvedValue(tweet);
+            await getImage(req, res);
 
-            await controller.getImage(mockReq, mockRes);
-
-            expect(mockRes.set).toHaveBeenCalledWith('Content-Type', 'image/png');
-            expect(mockRes.send).toHaveBeenCalledWith(imageData);
+            expect(res.set).toHaveBeenCalledWith('Content-Type', 'image/png');
+            expect(res.send).toHaveBeenCalledWith(Buffer.from('image buffer'));
         });
 
-        it('should return 404 if no tweet or image', async () => {
-            mockTweetService.getTweetById.mockResolvedValue(null);
+        it('should return 404 if image is not found', async () => {
+            const mockTweet = { id: 'tweet123', image: null };
+            jest.spyOn(tweetService, 'getTweetById').mockResolvedValue(mockTweet);
 
-            await controller.getImage(mockReq, mockRes);
+            await getImage(req, res);
 
-            expect(mockRes.status).toHaveBeenCalledWith(404);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({
+                success: false,
+                message: "Image not found",
+                data: {},
+                err: {}
+            });
+        });
+
+        it('should return 500 on error', async () => {
+            jest.spyOn(tweetService, 'getTweetById').mockRejectedValue(new Error('Error retrieving image'));
+
+            await getImage(req, res);
+
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
+                success: false,
+                message: "Something went wrong!",
+                data: {},
+                err: "Error retrieving image"
+            }));
         });
     });
 });

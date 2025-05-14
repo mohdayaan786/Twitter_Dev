@@ -24,5 +24,6 @@ const createComm = async(req,res) => {
 }
 
 module.exports = {
-    createComm
+    createComm,
+    commentService
 }
