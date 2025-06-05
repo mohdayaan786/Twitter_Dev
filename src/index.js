@@ -3,6 +3,7 @@ const connect = require('./config/database');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const app = express();
+const infoPage = require('./config/info');
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -15,6 +16,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 passportAuth(passport);
+
+app.use('/',infoPage);
 
 app.use('/api', ApiRoutes);
 
